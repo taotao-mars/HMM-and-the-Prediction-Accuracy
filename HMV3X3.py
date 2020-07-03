@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[9]:
+# In[75]:
 
 
 import random
@@ -18,8 +18,8 @@ def rand_pick(seq , probabilities):
             break
     return item
 
-state_list = [[0]*15 for i in range(10)]
-emission_list = [[0]*15 for i in range(10)]
+state_list = [[0]*15 for i in range(1000)]
+emission_list = [[0]*15 for i in range(1000)]
 
 first_probabilities=[0.333,0.333,0.333]
 
@@ -84,7 +84,7 @@ def viterbi(pi, a, b, obs):
 
 
 count_list=0
-while count_list<10:
+while count_list<1000:
     fist_state=rand_pick(value_list, first_probabilities)
     state_list[count_list][0]=fist_state
     count_list_element=1
@@ -94,7 +94,7 @@ while count_list<10:
     count_list=count_list+1
 
 count_list=0
-while count_list<10:
+while count_list<1000:
     count_list_element=0
     while count_list_element<15:
         emission_list[count_list][count_list_element]=rand_pick(value_list,b_df.values[state_list[count_list][count_list_element]])
@@ -103,20 +103,32 @@ while count_list<10:
 
 
 def calculate_precision(list1,list2):
-    length=15
     count=0;
     a=0;
-    while a<length:
+    
+    while a<len(list1):
         if list1[a]==list2[a]:
             count=count+1
         a=a+1
-    return count/length
+    return count/len(list1)
 
 test_index=0
-while test_index<10:
+precisions =0
+while test_index < 1000:
+
     path, delta, phi = viterbi(pi, a, b, np.array(emission_list[test_index]))
-    print(calculate_precision(path,state_list[test_index]))
+    #precision =calculate_precision(a,b)
+    #precisions+=precision
+    result =calculate_precision(path,state_list[test_index])
+    precisions+=result
+    #print(calculate_precision(path,state_list[test_index]))
     test_index=test_index+1
+    
+print('\n 3x3 AVG:{}%'.format(str(precisions/1000*100)))
+
+
+# In[ ]:
+
 
 
 
